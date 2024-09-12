@@ -1,0 +1,37 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+int main() {
+    char ch;
+    int whiteSpaces = 0, newLines = 0;
+    FILE *fp;
+
+    // Open the file for reading
+    fp = fopen("flex_input.txt", "r");
+    if (fp == NULL) {
+        printf("Error while opening the file\n");
+        exit(0);
+    }
+
+    // Read each character from the file
+    while ((ch = fgetc(fp)) != EOF) {
+        // Check for whitespace characters
+        if (ch == ' ' || ch == '\t') {
+            whiteSpaces++;
+        }
+        // Check for newline characters
+        else if (ch == '\n') {
+            newLines++;
+        }
+    }
+
+    // Close the file
+    fclose(fp);
+
+    // Print the results
+    printf("Number of whitespaces: %d\n", whiteSpaces);
+    printf("Number of newlines: %d\n", newLines);
+
+    return 0;
+}
+
