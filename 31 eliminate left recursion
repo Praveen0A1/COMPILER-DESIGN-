@@ -1,0 +1,55 @@
+#include <stdio.h>
+#include <string.h>
+#define SIZE 10
+
+int main() {
+    char non_terminal;
+    char beta[SIZE], alpha[SIZE];
+    int num;
+    char production[10][SIZE];
+    printf("Enter Number of Production: ");
+    scanf("%d", &num);
+    printf("Enter the grammar as E->E-A :\n");
+    for (int i = 0; i < num; i++) {
+        scanf("%s", production[i]);
+    }
+
+    for (int i = 0; i < num; i++) {
+        printf("\nGRAMMAR : : : %s", production[i]);
+        non_terminal = production[i][0];
+        int index = 3; // Reset index for each production
+        if (non_terminal == production[i][index]) {
+            int alpha_index = 0;
+            int beta_index = 0;
+            index++;
+            // Extract alpha
+            while (production[i][index] != '\0' && production[i][index] != '|') {
+                alpha[alpha_index++] = production[i][index++];
+            }
+            alpha[alpha_index] = '\0';
+            
+            // Move past '|'
+            if (production[i][index] == '|') {
+                index++;
+            } else {
+                printf(" can't be reduced\n");
+                continue;
+            }
+            
+            // Extract beta
+            while (production[i][index] != '\0') {
+                beta[beta_index++] = production[i][index++];
+            }
+            beta[beta_index] = '\0';
+            
+            printf(" is left recursive.\n");
+            printf("Grammar without left recursion:\n");
+            printf("%c->%s%c'\n", non_terminal, beta, non_terminal);
+            printf("%c'->%s%c'|ε\n", non_terminal, alpha, non_terminal);
+        } else {
+            printf(" is not left recursive.\n");
+        }
+    }
+    return 0;
+}
+
