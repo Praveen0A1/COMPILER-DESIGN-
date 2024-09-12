@@ -1,0 +1,59 @@
+#include <stdio.h>
+#include <string.h>
+
+#define MAX 100
+
+typedef struct {
+    char left[MAX];
+    char right[MAX];
+} Expression;
+
+void eliminate_common_subexpressions(Expression expressions[], int count) {
+    int i, j, k;
+    int optimized_count = 0;
+    Expression optimized[MAX];
+    
+    for (i = 0; i < count; i++) {
+        int found = 0;
+        for (j = 0; j < optimized_count; j++) {
+            if (strcmp(expressions[i].right, optimized[j].right) == 0) {
+                printf("%s = %s\n", expressions[i].left, optimized[j].left);
+                found = 1;
+                break;
+            }
+        }
+        if (!found) {
+            optimized[optimized_count++] = expressions[i];
+            printf("%s = %s\n", expressions[i].left, expressions[i].right);
+        }
+    }
+}
+
+int main() {
+    int count, i;
+    Expression expressions[MAX];
+    
+    printf("Enter the number of expressions: ");
+    scanf("%d", &count);
+    getchar(); // Consume the newline character
+
+    printf("Enter the expressions (e.g., a = b + c):\n");
+    for (i = 0; i < count; i++) {
+        printf("Expression %d: ", i + 1);
+        fgets(expressions[i].left, MAX, stdin);
+        // Split the input into left and right parts
+        char *token = strtok(expressions[i].left, "=");
+        strcpy(expressions[i].left, token);
+        token = strtok(NULL, "\n");
+        strcpy(expressions[i].right, token);
+        // Remove any leading/trailing spaces
+        expressions[i].left[strcspn(expressions[i].left, "\n")] = '\0';
+        expressions[i].right[strcspn(expressions[i].right, "\n")] = '\0';
+    }
+
+    printf("\nOptimized code:\n");
+    eliminate_common_subexpressions(expressions, count);
+
+    return 0;
+}
+
